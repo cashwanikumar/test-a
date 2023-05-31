@@ -1,44 +1,11 @@
 name: Chatops plan - Integration tests
-
 on:
-  issue_comment:
-    types: [created]
+  pull_request_review_comment:
+    types: [created, deleted]
 
 jobs:
-  your_job:
-    if: >
-      github.event.issue.pull_request &&
-      startsWith(github.event.comment.body, 'run integration tests')
-    name: your_job
+  approved:
+    if: github.event.review.state == 'approved'
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch Branch Name
-        id: fetch-branch-name
-        uses: xt0rted/pull-request-comment-branch@v2
-
-      - name: Check out code from ${{ steps.fetch-branch-name.outputs.head_ref }}
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.fetch-branch-name.outputs.head_ref }}
-      
-      - name: Post response to GitHub PR
-        uses: mshick/add-pr-comment@v2
-        with:
-          message: |
-            Action started. Click [here](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) to see the status.
-# name: issue-comment-CI-test 
-
-# on: 
-#   issue_comment:    
-#     types: [created]    
-# jobs:   
-#   build:    
-
-#     runs-on: ubuntu-latest  
-
-#     steps:  
-#     - uses: actions/checkout@v1 
-#     - name: Run a one-line script   
-#       run: echo Hello, world!   
-#     - name: Run a multi-line script 
-#       run: echo ${{ github.event.comment.body }}
+      - run: echo "This PR was approved"
