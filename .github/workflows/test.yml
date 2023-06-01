@@ -1,15 +1,19 @@
-name: Test-comment-2
+name: PR Conversation Trigger
+
 on:
-  # pull_request_review_comment:
-  #   types: [created]
-  pull_request_review:
-    types: ["submitted", "edited", "dismissed"]
   issue_comment:
-    types: ["created", "edited", "deleted"]
+    types:
+      - created
 
 jobs:
-  approved:
-    # if: github.event.review.state == 'approved'
+  trigger_on_pr_conversation:
     runs-on: ubuntu-latest
+
     steps:
-      - run: echo "This PR was approved"
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Run on PR Conversation
+        if: github.event.issue.pull_request
+        run: |
+          echo "PR conversation added!"
